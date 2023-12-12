@@ -14,4 +14,4 @@ cat $CUSTOM_CSS >> /opt/youtrack/conf/$STYLE_LNK;
 ln -s /opt/youtrack/conf/$STYLE_LNK $STATIC_DIR/$STYLE_LNK;
 cd /;
 su jetbrains;
-/run.sh
+/run.sh "$@"
