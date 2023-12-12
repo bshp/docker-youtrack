@@ -11,7 +11,7 @@ STYLE_LNK=$(basename "$STYLE_CSS");
 
 mv $STYLE_CSS /opt/youtrack/conf/;
 cat $CUSTOM_CSS >> /opt/youtrack/conf/$STYLE_LNK;
-ln -s /opt/youtrack/conf/$STYLE_LNK $STATIC_DIR/$STYLE_LNK;
+cp /opt/youtrack/conf/$STYLE_LNK $STATIC_DIR;
 cd /;
 su jetbrains;
 /run.sh "$@" 
