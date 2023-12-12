@@ -4,14 +4,14 @@ set -eux;
 STATIC_DIR=/opt/youtrack/apps/youtrack/web/static/simplified;
 CUSTOM_CSS=/opt/youtrack/conf/custom.css;
 
-cd $STATIC_DIR;
+cd /opt/youtrack/apps/youtrack/web/static/simplified;
 
 STYLE_CSS=$(find ~+ -name 'styles.*.css');
 STYLE_LNK=$(basename "$STYLE_CSS");
 
 mv $STYLE_CSS /opt/youtrack/conf/;
 cat $CUSTOM_CSS >> /opt/youtrack/conf/$STYLE_LNK;
-cp /opt/youtrack/conf/$STYLE_LNK $STATIC_DIR;
+cp /opt/youtrack/conf/$STYLE_LNK $STATIC_DIR/;
 cd /;
 su jetbrains;
 /run.sh "$@" 
