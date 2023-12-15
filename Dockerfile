@@ -1,4 +1,4 @@
-FROM jetbrains/youtrack:2023.3.21798
+FROM jetbrains/youtrack:2023.3.22268
     
 LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
     
