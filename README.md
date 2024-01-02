@@ -5,7 +5,7 @@ License: https://www.jetbrains.com/legal/docs/youtrack/license/
     
 #### Tags    
 latest = built from jetbrains official docker image
-xxxx.x = built from source using zip, base os is Ubuntu LTS
+2023.x = built from source using zip, base os is Ubuntu LTS
     
 #### Build:    
 If YOUTRACK_VERSION is omitted, your build will be based on the latest release available
