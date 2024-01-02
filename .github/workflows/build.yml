@@ -20,21 +20,17 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: master
-    - name: Build Source
+    - name: Build Custom
       run: |
-        docker build . --pull --tag bshp/youtrack:tmp --progress=plain --no-cache 2>&1 | tee /tmp/build.output
+        docker build ./src/custom.dockerfile --pull --tag bshp/youtrack:tmp --progress=plain --no-cache 2>&1 | tee /tmp/build.output
         echo "TAG_NAME=$(cat /tmp/build.output | grep -oP '(?<=TAG_VERSION\:)(\d+\.\d+\.\d+)$')" >> $GITHUB_ENV
-    - name: Push Source
+    - name: Push Custom
       run: |
         docker tag bshp/youtrack:tmp bshp/youtrack:${{ env.TAG_NAME }}
         docker push bshp/youtrack:${{ env.TAG_NAME }}
-    - name: Checkout Registry
-      uses: actions/checkout@v4
-      with:
-        ref: registry
     - name: Build Jetbrains
       run: |
-        docker build . --pull --tag bshp/youtrack:latest --progress=plain
+        docker build ./src/jetbrains.dockerfile --pull --tag bshp/youtrack:latest --progress=plain
     - name: Push Jetbrains
       run: |
         docker push bshp/youtrack:latest
