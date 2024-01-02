@@ -11,15 +11,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
     - name: Configure Docker
-      env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
-        DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
+      uses: docker/login-action@v1
+      with:
+        username: ${{secrets.DOCKER_USER}}
+        password: ${{secrets.DOCKER_TOKEN}}
+    - name: Checkout Main
+      uses: actions/checkout@v4
+      with:
+        ref: master
+    - name: Build Source
       run: |
-        docker login -u $DOCKER_USER -p $DOCKER_TOKEN
-    - name: Build
-      run: docker build . --pull --tag bshp/youtrack:latest --progress=plain
-    - name: Push
+        docker build . --pull --tag bshp/youtrack:tmp --progress=plain --no-cache 2>&1 | tee /tmp/build.output
+        echo "TAG_NAME=$(cat /tmp/build.output | grep -oP '(?<=TAG_VERSION\:)(\d+\.\d+\.\d+)$')" >> $GITHUB_ENV
+    - name: Push Source
+      run: |
+        docker tag youtrack:tmp bshp/youtrack:"${{ env.TAG_NAME }}"
+        docker push bshp/youtrack:"${{ env.TAG_NAME }}"
+    - name: Checkout Registry
+      uses: actions/checkout@v4
+      with:
+        ref: registry
+    - name: Build Jetbrains
+      run: |
+        docker build . --pull --tag bshp/youtrack:latest --progress=plain
+    - name: Push Jetbrains
       run: |
         docker push bshp/youtrack:latest
