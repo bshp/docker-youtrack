@@ -48,4 +48,4 @@ EXPOSE 80 443 8080 8443
     
 VOLUME [/opt/youtrack/backups /opt/youtrack/conf /opt/youtrack/data /opt/youtrack/logs]
     
-ENTRYPOINT ["run.sh"]
+ENTRYPOINT ["/usr/local/bin/run.sh"]
