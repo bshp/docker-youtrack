@@ -22,7 +22,7 @@ jobs:
         ref: master
     - name: Build Custom
       run: |
-        docker build ./src -f custom.dockerfile --pull --tag bshp/youtrack:tmp --progress=plain --no-cache 2>&1 | tee /tmp/build.output
+        docker build . -f custom.dockerfile --pull --tag bshp/youtrack:tmp --progress=plain --no-cache 2>&1 | tee /tmp/build.output
         echo "TAG_NAME=$(cat /tmp/build.output | grep -oP '(?<=TAG_VERSION\:)(\d+\.\d+\.\d+)$')" >> $GITHUB_ENV
     - name: Push Custom
       run: |
@@ -30,7 +30,7 @@ jobs:
         docker push bshp/youtrack:${{ env.TAG_NAME }}
     - name: Build Jetbrains
       run: |
-        docker build ./src -f jetbrains.dockerfile --pull --tag bshp/youtrack:latest --progress=plain
+        docker build . -f jetbrains.dockerfile --pull --tag bshp/youtrack:latest --progress=plain
     - name: Push Jetbrains
       run: |
         docker push bshp/youtrack:latest
