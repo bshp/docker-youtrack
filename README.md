@@ -1,11 +1,15 @@
-#### Jetbrains YouTrack    
-    
-Sourced from Official YouTrack Docker Image, changes made to include custom.css    
+#### Jetbrains YouTrack
+Sourced from Official YouTrack Docker Image, changes made to include custom.css. The images are auto-updated weekly
     
 License: https://www.jetbrains.com/legal/docs/youtrack/license/
+    
+#### Tags    
+latest = built from jetbrains official docker image
+xxxx.x = built from source using zip, base os is Ubuntu LTS
+    
+#### Build:    
+If YOUTRACK_VERSION is omitted, your build will be based on the latest release available
 ````
-Build:  
-````
-docker build . --tag YOUR_TAG
+docker build . --build-arg YOUTRACK_VERSION=1234.2.2022 --tag YOUR_TAG
 ````
     
