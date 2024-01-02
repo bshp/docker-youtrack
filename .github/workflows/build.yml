@@ -26,7 +26,7 @@ jobs:
         echo "TAG_NAME=$(cat /tmp/build.output | grep -oP '(?<=TAG_VERSION\:)(\d+\.\d+\.\d+)$')" >> $GITHUB_ENV
     - name: Push Source
       run: |
-        docker tag youtrack:tmp bshp/youtrack:${{ env.TAG_NAME }}
+        docker tag bshp/youtrack:tmp bshp/youtrack:${{ env.TAG_NAME }}
         docker push bshp/youtrack:${{ env.TAG_NAME }}
     - name: Checkout Registry
       uses: actions/checkout@v4
