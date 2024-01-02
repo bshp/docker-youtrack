@@ -4,7 +4,7 @@ Sourced from Official YouTrack Docker Image, changes made to include custom.css.
 License: https://www.jetbrains.com/legal/docs/youtrack/license/
     
 #### Tags    
-latest           = built from jetbrains official docker image
+latest           = built from jetbrains official docker image  
 version numbered = built from source using zip, base os is Ubuntu LTS
     
 #### Build:    
