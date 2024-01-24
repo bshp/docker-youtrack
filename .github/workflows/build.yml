@@ -20,17 +20,18 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: master
+    - name: Set Version
+      run: |
+        echo "BUILD_VERSION=$(wget --quiet --no-cookies https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack/tags?page_size=1 -O - | jq -c '.results[].name' | tr -d \")" >> $GITHUB_ENV
     - name: Build Custom
       run: |
-        docker build . -f custom.dockerfile --pull --tag bshp/youtrack:tmp --progress=plain --no-cache 2>&1 | tee /tmp/build.output
-        echo "TAG_NAME=$(cat /tmp/build.output | grep -oP '(?<=TAG_VERSION\:)(\d+\.\d+\.\d+)$')" >> $GITHUB_ENV
+        docker build . -f custom.dockerfile --pull --build-arg BUILD_VERSION=${{ env.BUILD_VERSION }} --tag bshp/itsm:${{ env.BUILD_VERSION }} --no-cache
     - name: Push Custom
       run: |
-        docker tag bshp/youtrack:tmp bshp/youtrack:${{ env.TAG_NAME }}
-        docker push bshp/youtrack:${{ env.TAG_NAME }}
+        docker push bshp/itsm:${{ env.BUILD_VERSION }}
     - name: Build Jetbrains
       run: |
-        docker build . -f jetbrains.dockerfile --pull --tag bshp/youtrack:latest --progress=plain
+        docker build . -f jetbrains.dockerfile --pull --build-arg BUILD_VERSION=${{ env.BUILD_VERSION }} --tag bshp/itsm:latest  --no-cache
     - name: Push Jetbrains
       run: |
-        docker push bshp/youtrack:latest
+        docker push bshp/itsm:latest

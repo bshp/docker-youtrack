@@ -1,10 +1,13 @@
+ARG BUILD_VERSION
+    
 FROM ubuntu:jammy
     
 LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
     
+ARG BUILD_VERSION
 ARG TZ=America/North_Dakota/Center
 ARG CDN=https://download-cdn.jetbrains.com/charisma
-ARG YOUTRACK_VERSION=0
+ARG YOUTRACK_VERSION=${BUILD_VERSION}
     
 ENV OS_BASE=22.04
 ENV OS_CODENAME=jammy

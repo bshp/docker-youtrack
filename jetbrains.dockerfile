@@ -1,4 +1,6 @@
-FROM jetbrains/youtrack:2023.3.22268
+ARG BUILD_VERSION
+    
+FROM jetbrains/youtrack:${BUILD_VERSION}
     
 LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
     
