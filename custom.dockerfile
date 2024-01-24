@@ -9,8 +9,6 @@ ARG TZ=America/North_Dakota/Center
     
 FROM bshp/ocie:${VERSION}
     
-FROM ubuntu:jammy
-    
 LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
     
 ARG ITSM_VERSION
