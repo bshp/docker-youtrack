@@ -1,5 +1,5 @@
 # Ocie Version, e.g 22.04 unquoted
-ARG VERSION
+ARG OCIE_VERSION
     
 # YourTrack Version
 ARG ITSM_VERSION
@@ -7,7 +7,7 @@ ARG ITSM_VERSION
 # Optional: Change Timezone
 ARG TZ=America/North_Dakota/Center
     
-FROM bshp/ocie:${VERSION}
+FROM bshp/ocie:${OCIE_VERSION}
     
 LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
     
