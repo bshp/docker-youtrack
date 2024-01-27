@@ -13,12 +13,13 @@ LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
     
 ARG ITSM_VERSION
 ARG TZ=America/North_Dakota/Center
-ARG CDN=https://download-cdn.jetbrains.com/charisma
+ARG CDN="https://download-cdn.jetbrains.com/charisma"
 ARG YOUTRACK_VERSION=${ITSM_VERSION}
     
 ENV CDN=${CDN}
-ENV HUB_VERSION=https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack
+ENV APP_TYPE="itsm"
 ENV YOUTRACK_HOME=/opt/youtrack
+ENV HUB_VERSION="https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack"
 ENV PATH=$PATH:$YOUTRACK_HOME/bin
     
 RUN <<"EOD" bash
@@ -41,10 +42,8 @@ RUN <<"EOD" bash
     echo "System setup complete, YourTrack Version: ${YOUTRACK_VERSION}";
 EOD
     
-COPY --chown=root:root --chmod=0755 ./src/run.sh ./usr/local/bin/run.sh
-    
 EXPOSE 80 443 8080 8443
     
 VOLUME [/opt/youtrack/backups /opt/youtrack/conf /opt/youtrack/data /opt/youtrack/logs]
     
-ENTRYPOINT ["/usr/local/bin/run.sh"]
+ENTRYPOINT ["/usr/local/bin/ociectl", "--run"]
