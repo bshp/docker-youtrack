@@ -3,23 +3,17 @@ ARG OCIE_VERSION
     
 # YourTrack Version
 ARG ITSM_VERSION
-
-# Optional: Change Timezone
-ARG TZ=America/North_Dakota/Center
     
 FROM bshp/ocie:${OCIE_VERSION}
     
-LABEL org.opencontainers.image.authors="jason.everling@gmail.com"
-    
 ARG ITSM_VERSION
-ARG TZ=America/North_Dakota/Center
-ARG CDN="https://download-cdn.jetbrains.com/charisma"
-ARG YOUTRACK_VERSION=${ITSM_VERSION}
     
-ENV CDN=${CDN}
 ENV APP_TYPE="itsm"
-ENV YOUTRACK_HOME=/opt/youtrack
-ENV HUB_VERSION="https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack"
+    CDN="https://download-cdn.jetbrains.com/charisma"
+    YOUTRACK_HOME=/opt/youtrack
+    YOUTRACK_VERSION=${ITSM_VERSION} \
+    HUB_VERSION="https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack"
+    
 ENV PATH=$PATH:$YOUTRACK_HOME/bin
     
 RUN <<"EOD" bash
