@@ -8,13 +8,12 @@ FROM bshp/ocie:${OCIE_VERSION}
     
 ARG ITSM_VERSION
     
-ENV APP_TYPE="itsm"
-    CDN="https://download-cdn.jetbrains.com/charisma"
-    YOUTRACK_HOME=/opt/youtrack
+ENV APP_TYPE="itsm" \
+    CDN="https://download-cdn.jetbrains.com/charisma" \
+    PATH=$PATH:/opt/youtrack/bin \
+    YOUTRACK_HOME=/opt/youtrack \
     YOUTRACK_VERSION=${ITSM_VERSION} \
     HUB_VERSION="https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack"
-    
-ENV PATH=$PATH:$YOUTRACK_HOME/bin
     
 RUN <<"EOD" bash
     set -eu;
