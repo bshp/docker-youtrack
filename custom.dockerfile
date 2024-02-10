@@ -20,9 +20,9 @@ RUN <<"EOD" bash
     # Add packages
     ocie --pkg "-base";
     useradd -m -u 13001 jetbrains;
-    wget --quiet --no-cookies ${CDN}/youtrack-${YOUTRACK_VERSION}.zip -O /youtrack-${YOUTRACK_VERSION}.zip;
-    wget --quiet --no-cookies ${CDN}/youtrack-${YOUTRACK_VERSION}.zip.sha256 -O /youtrack-${YOUTRACK_VERSION}.zip.sha256;
-    YOUTRACK_SIG="$(sha256sum -c /youtrack-${YOUTRACK_VERSION}.zip.sha256 2>&1 | grep OK)";
+    wget --quiet --no-cookies ${CDN}/youtrack-${YOUTRACK_VERSION}.zip;
+    wget --quiet --no-cookies ${CDN}/youtrack-${YOUTRACK_VERSION}.zip.sha256;
+    YOUTRACK_SIG=$(echo $(cat youtrack-${YOUTRACK_VERSION}.zip.sha256 | sed 's/\s.*$//') youtrack-${YOUTRACK_VERSION}.zip | sha256sum -c | grep OK);
     if [[ -z "$YOUTRACK_SIG" ]];then
         echo "Signature does not match";
         exit 1;
