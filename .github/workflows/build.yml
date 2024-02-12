@@ -2,7 +2,7 @@ name: Docker CI
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
       - '.gitignore'
       - 'README.md'
@@ -20,7 +20,7 @@ jobs:
     - name: Checkout Main
       uses: actions/checkout@v4
       with:
-        ref: master
+        ref: main
     - name: Set Version
       run: |
         echo "ITSM_VERSION=$(wget --quiet --no-cookies https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack/tags?page_size=1 -O - | jq -c '.results[].name' | tr -d \")" >> $GITHUB_ENV
