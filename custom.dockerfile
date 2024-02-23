@@ -8,36 +8,44 @@ FROM bshp/ocie:${OCIE_VERSION}
     
 ARG ITSM_VERSION
     
-ENV APP_TYPE="itsm" \
+ENV APP_ENV="prod" \
+    APP_TYPE="itsm" \
+    APP_DATA=/opt/youtrack \
+    APP_HOME=/usr/local/youtrack \
+    APP_GROUP="jetbrains" \
+    APP_OWNER="jetbrains" \
+    APP_VERSION=${ITSM_VERSION} \
+    APP_VOLS="/opt/youtrack/backups:/opt/youtrack/conf:/opt/youtrack/data:/opt/youtrack/logs" \
     CDN="https://download-cdn.jetbrains.com/charisma" \
-    PATH=$PATH:/opt/youtrack/bin \
-    YOUTRACK_HOME=/opt/youtrack \
-    YOUTRACK_PID=/opt/youtrack/logs/youtrack.pid \
-    YOUTRACK_VERSION=${ITSM_VERSION} \
+    PATH=$PATH:/usr/local/youtrack/bin \
     HUB_VERSION="https://hub.docker.com/v2/namespaces/jetbrains/repositories/youtrack"
     
 RUN <<"EOD" bash
     set -eu;
     # Add packages
     ocie --pkg "-base";
-    useradd -m -u 13001 jetbrains;
-    wget --quiet --no-cookies ${CDN}/youtrack-${YOUTRACK_VERSION}.zip;
-    wget --quiet --no-cookies ${CDN}/youtrack-${YOUTRACK_VERSION}.zip.sha256;
-    YOUTRACK_SIG=$(echo $(cat youtrack-${YOUTRACK_VERSION}.zip.sha256 | sed 's/\s.*$//') youtrack-${YOUTRACK_VERSION}.zip | sha256sum -c | grep OK);
-    if [[ -z "$YOUTRACK_SIG" ]];then
+    useradd -m -u 13001 ${APP_OWNER};
+    wget --quiet --no-cookies ${CDN}/youtrack-${APP_VERSION}.zip;
+    wget --quiet --no-cookies ${CDN}/youtrack-${APP_VERSION}.zip.sha256;
+    ZIP_SIG=$(echo $(cat youtrack-${APP_VERSION}.zip.sha256 | sed 's/\s.*$//') youtrack-${APP_VERSION}.zip | sha256sum -c | grep OK);
+    if [[ -z "$ZIP_SIG" ]];then
         echo "Signature does not match";
         exit 1;
     fi;
-    unzip -qq /youtrack-${YOUTRACK_VERSION}.zip -d /opt;
-    mv /opt/youtrack-${YOUTRACK_VERSION} /opt/youtrack;
-    rm -f /youtrack-${YOUTRACK_VERSION}.zip youtrack-${YOUTRACK_VERSION}.zip.sha256;
-    chown -R jetbrains:jetbrains ${YOUTRACK_HOME} && chmod -R 0775 ${YOUTRACK_HOME};
+    unzip -qq /youtrack-${APP_VERSION}.zip -d /usr/local;
+    mv /usr/local/youtrack-${APP_VERSION} ${APP_HOME};
+    rm -rf ${APP_HOME}/conf;
+    mkdir -p ${APP_DATA}/backups ${APP_DATA}/conf ${APP_DATA}/data ${APP_DATA}/logs;
+    ln -s ${APP_DATA}/backups ${APP_HOME}/;
+    ln -s ${APP_DATA}/conf ${APP_HOME}/;
+    ln -s ${APP_DATA}/data ${APP_HOME}/;
+    ln -s ${APP_DATA}/logs ${APP_HOME}/;
+    chown -R ${APP_OWNER}:${APP_GROUP} ${APP_DATA} ${APP_HOME} && chmod -R 0775 ${APP_DATA} ${APP_HOME};
+    rm -f /youtrack-${APP_VERSION}.zip youtrack-${APP_VERSION}.zip.sha256;
     ocie --clean "-base";
-    echo "System setup complete, YourTrack Version: ${YOUTRACK_VERSION}";
+    echo "System setup complete, YourTrack Version: ${APP_VERSION}";
 EOD
     
 EXPOSE 80 443 8080 8443
     
-VOLUME [/opt/youtrack/backups /opt/youtrack/conf /opt/youtrack/data /opt/youtrack/logs]
-    
-ENTRYPOINT ["/usr/local/bin/ociectl", "--run"]
+ENTRYPOINT ["/usr/sbin/ociectl", "--run"]
