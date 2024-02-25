@@ -48,4 +48,4 @@ EOD
     
 EXPOSE 80 443 8080 8443
     
-ENTRYPOINT ["/usr/sbin/ociectl", "--run"]
+CMD ["/bin/bash"]
