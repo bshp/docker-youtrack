@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function app_shutdown()
+{
+    ${APP_HOME}/bin/youtrack.sh stop >/dev/null 2>&1;
+}
+    
+function app_reload()
+{
+    ${APP_HOME}/bin/youtrack.sh restart >/dev/null 2>&1;
+}
+    
+function app_start()
+{
+    (
+    su jetbrains -c "${APP_HOME}/bin/youtrack.sh start $@"
+    ) >/dev/null 2>&1;
+    sleep 15;
+    echo "$(cat ${APP_DATA}/logs/youtrack.pid | sed 's/ //')";
+}
+    
+function app_certs()
+{
+    ${OCIE_LIB}/cacerts;
+}
+    
+function app_config()
+{
+    local custom_css="${APP_DATA}/conf/custom.css";
+    local static_dir="${APP_HOME}/apps/youtrack/web/static/simplified";
+    if [[ -f "${custom_css}" ]];then
+        cd "${static_dir}";
+        local style_css=$(find ~+ -name 'styles.*.css');
+        local style_lnk=$(basename "${style_css}");
+        cp "${style_css}" "${APP_DATA}/conf/";
+        cat "${custom_css}" >> "${APP_DATA}/conf/${style_lnk}";
+        cp "${APP_DATA}/conf/${style_lnk}" "${static_dir}/";
+        cd /;
+    fi;
+}
